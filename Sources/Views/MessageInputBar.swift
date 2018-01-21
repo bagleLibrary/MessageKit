@@ -77,7 +77,7 @@ open class MessageInputBar: UIView {
     
     /// A SeparatorLine that is anchored at the top of the MessageInputBar with a height of 1
     open let separatorLine = SeparatorLine()
-    
+
     /**
      The InputStackView at the InputStackView.top position
      
@@ -123,6 +123,7 @@ open class MessageInputBar: UIView {
         textView.messageInputBar = self
         return textView
     }()
+
 
     /// A InputBarButtonItem used as the send button and initially placed in the rightStackView
     open var sendButton: InputBarButtonItem = {
@@ -683,6 +684,7 @@ open class MessageInputBar: UIView {
     /// Invalidates the intrinsicContentSize so that the keyboard does not overlap the view
     @objc
     open func textViewDidBeginEditing() {
+        delegate?.messageInputBar(self, didBeginEditing: self.inputTextView)
         items.forEach { $0.keyboardEditingBeginsAction() }
     }
     

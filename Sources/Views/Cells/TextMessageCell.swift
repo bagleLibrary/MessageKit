@@ -71,6 +71,18 @@ open class TextMessageCell: MessageCollectionViewCell {
             fatalError("MessagesDisplayDelegate not set.")
         }
 
+        guard let layoutDelegate = messagesCollectionView.messagesLayoutDelegate else {
+            fatalError("MessagesDisplayDelegate not set.")
+        }
+
+        if layoutDelegate.avatarShouldAppear(for: message, at: indexPath, in: messagesCollectionView) {
+            avatarView.isHidden = false
+            cellTopLabel.isHidden = false
+        } else {
+            avatarView.isHidden = true
+            cellTopLabel.isHidden = true
+        }
+
         let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
         let enabledDetectors = displayDelegate.enabledDetectors(for: message, at: indexPath, in: messagesCollectionView)
 

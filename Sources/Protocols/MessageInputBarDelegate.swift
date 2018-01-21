@@ -26,7 +26,9 @@ import Foundation
 
 /// MessageInputBarDelegate is a protocol that can recieve notifications from the MessageInputBar
 public protocol MessageInputBarDelegate: AnyObject {
-    
+
+    func messageInputBar(_ inputBar: MessageInputBar, didBeginEditing textView: InputTextView)
+
     /// Called when the default send button has been selected
     ///
     /// - Parameters:

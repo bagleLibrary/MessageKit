@@ -26,6 +26,10 @@ import UIKit
 
 public protocol MessagesDataSource: AnyObject {
 
+    func sendersAreSame(previous: Sender, current: Sender) -> Bool
+
+    func currentSenderWith(message: MessageType) -> [Sender]
+
     /// The `Sender` of new messages in the `MessagesCollectionView`.
     func currentSender() -> Sender
 
@@ -85,8 +89,16 @@ public protocol MessagesDataSource: AnyObject {
 
 public extension MessagesDataSource {
 
+    func currentSender() -> Sender {
+        return Sender(id: "any_id", displayName: "steven")
+    }
+
     func isFromCurrentSender(message: MessageType) -> Bool {
-        return message.sender == currentSender()
+        // true: mainCharacter
+        // false: notMain
+        let sender = currentSenderWith(message: message).filter { return $0.id == message.sender.id }
+
+        return sender.count != 0 ? true : false
     }
 
     func avatar(for message: MessageType, at  indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> Avatar {

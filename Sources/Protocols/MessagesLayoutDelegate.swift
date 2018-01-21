@@ -29,6 +29,8 @@ import AVFoundation
 /// the size and layout of a `MessageCollectionViewCell` and its contents.
 public protocol MessagesLayoutDelegate: AnyObject {
 
+    func avatarShouldAppear(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> Bool
+    func messageContainterAlignment(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> AvatarPosition.Horizontal
     // MARK: - All Messages
 
     /// Specifies the padding around the `MessageContainerView` in a `MessageCollectionViewCell`.

@@ -26,7 +26,7 @@ import Foundation
 
 /// A intermediate context used to store recently calculated values used by
 /// the `MessagesCollectionViewFlowLayout` object to reduce redundant calculations.
-final class MessageIntermediateLayoutAttributes {
+open class MessageIntermediateLayoutAttributes {
 
     // Message
     var message: MessageType
@@ -53,6 +53,8 @@ final class MessageIntermediateLayoutAttributes {
             origin.x = cellFrame.width - avatarSize.width
         case .natural:
             fatalError("AvatarPosition Horizontal.natural needs to be resolved.")
+        case .cellCenter:
+            origin.x = 0
         }
         
         switch avatarPosition.vertical {
@@ -77,15 +79,20 @@ final class MessageIntermediateLayoutAttributes {
     var messageContainerMaxWidth: CGFloat = 0
     var messageContainerPadding: UIEdgeInsets = .zero
     var messageLabelInsets: UIEdgeInsets = .zero
-    
+    var messageContainerAlignment: AvatarPosition.Horizontal = .cellCenter
+
     lazy var messageContainerFrame: CGRect = {
         
         guard messageContainerSize != .zero else { return .zero }
         
         var origin: CGPoint = .zero
         origin.y = topLabelSize.height + messageContainerPadding.top + topLabelVerticalPadding
-        
+
+        avatarPosition.horizontal = messageContainerAlignment
+
         switch avatarPosition.horizontal {
+        case .cellCenter:
+            origin.x = (cellFrame.width - messageContainerSize.width) / 2
         case .cellLeading:
             origin.x = avatarSize.width + messageContainerPadding.left
         case .cellTrailing:
@@ -93,7 +100,7 @@ final class MessageIntermediateLayoutAttributes {
         case .natural:
             fatalError("AvatarPosition Horizontal.natural needs to be resolved.")
         }
-        
+
         return CGRect(origin: origin, size: messageContainerSize)
         
     }()

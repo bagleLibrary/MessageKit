@@ -30,7 +30,8 @@ public struct AvatarPosition {
     
     /// An enum representing the horizontal alignment of an `AvatarView`.
     public enum Horizontal {
-        
+
+        case cellCenter
         /// Positions the `AvatarView` on the side closest to the cell's leading edge.
         case cellLeading
         

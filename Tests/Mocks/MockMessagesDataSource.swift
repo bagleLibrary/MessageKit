@@ -25,6 +25,13 @@
 import Foundation
 
 class MockMessagesDataSource: MessagesDataSource {
+    func sendersAreSame(previous: Sender, current: Sender) -> Bool {
+        return true
+    }
+
+    func currentSenderWith(message: MessageType) -> [Sender] {
+        return senders
+    }
 
     var messages: [MessageType] = []
     let senders: [Sender] = [Sender(id: "sender_1", displayName: "Sender 1"),

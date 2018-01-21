@@ -223,7 +223,7 @@ fileprivate extension MessagesCollectionViewFlowLayout {
         }
         
     }
-    
+
     /// Returns newly created `MessageIntermediateAttributes` for a given `MessageType` and `IndexPath`.
     ///
     /// - Parameters:
@@ -242,7 +242,8 @@ fileprivate extension MessagesCollectionViewFlowLayout {
         // MessageContainerView
         attributes.messageContainerMaxWidth = messageContainerMaxWidth(for: attributes)
         attributes.messageContainerSize = messageContainerSize(for: attributes)
-        
+        attributes.messageContainerAlignment = messageContainerAlignment(for: attributes)
+
         // Cell Bottom Label
         attributes.bottomLabelAlignment = cellBottomLabelAlignment(for: attributes)
         attributes.bottomLabelMaxWidth = cellBottomLabelMaxWidth(for: attributes)
@@ -306,7 +307,7 @@ fileprivate extension MessagesCollectionViewFlowLayout {
         var position = messagesLayoutDelegate.avatarPosition(for: attributes.message, at: attributes.indexPath, in: messagesCollectionView)
         
         switch position.horizontal {
-        case .cellTrailing, .cellLeading:
+        case .cellCenter, .cellTrailing, .cellLeading:
             break
         case .natural:
             position.horizontal = messagesDataSource.isFromCurrentSender(message: attributes.message) ? .cellTrailing : .cellLeading
@@ -340,7 +341,7 @@ private extension MessagesCollectionViewFlowLayout {
         
         let estimatedHeight = attributedText.height(considering: maxWidth)
         let estimatedWidth = attributedText.width(considering: estimatedHeight)
-        
+
         let finalHeight = estimatedHeight.rounded(.up)
         let finalWidth = estimatedWidth > maxWidth ? maxWidth : estimatedWidth.rounded(.up)
         
@@ -453,7 +454,8 @@ private extension MessagesCollectionViewFlowLayout {
 // MARK: - Cell Bottom Label Calculations  [ I - K ]
 
 private extension MessagesCollectionViewFlowLayout {
-    
+
+
     // I
     
     /// Returns the alignment of the cell's bottom label.
@@ -503,6 +505,10 @@ private extension MessagesCollectionViewFlowLayout {
 
         case (_, .natural):
             fatalError("AvatarPosition Horizontal.natural needs to be resolved.")
+        case (.messageLeading(_), .cellCenter):
+            return itemWidth - avatarWidth
+        case (.messageTrailing(_), .cellCenter):
+            return itemWidth - avatarWidth
         }
         
     }
@@ -518,6 +524,11 @@ private extension MessagesCollectionViewFlowLayout {
         let text = messagesDataSource.cellBottomLabelAttributedText(for: attributes.message, at: attributes.indexPath)
         
         guard let bottomLabelText = text else { return .zero }
+
+        if !messagesLayoutDelegate.avatarShouldAppear(for: attributes.message, at: attributes.indexPath, in: messagesCollectionView) {
+            return .zero
+        }
+
         return labelSize(for: bottomLabelText, considering: attributes.bottomLabelMaxWidth)
     }
 
@@ -526,7 +537,11 @@ private extension MessagesCollectionViewFlowLayout {
 // MARK: - Cell Top Label Size Calculations [ L - N ]
 
 private extension MessagesCollectionViewFlowLayout {
-    
+
+    func messageContainerAlignment(for attributes: MessageIntermediateLayoutAttributes) -> AvatarPosition.Horizontal {
+        return messagesLayoutDelegate.messageContainterAlignment(for: attributes.message, at: attributes.indexPath, in: messagesCollectionView)
+    }
+
     // L
     
     /// Returns the alignment of the cell's top label.
@@ -576,6 +591,10 @@ private extension MessagesCollectionViewFlowLayout {
 
         case (_, .natural):
             fatalError("AvatarPosition Horizontal.natural needs to be resolved.")
+        case (.messageLeading(_), .cellCenter):
+            return itemWidth - avatarWidth
+        case (.messageTrailing(_), .cellCenter):
+            return itemWidth - avatarWidth
         }
         
     }
@@ -592,8 +611,11 @@ private extension MessagesCollectionViewFlowLayout {
         
         guard let topLabelText = text else { return .zero }
 
-        return labelSize(for: topLabelText, considering: attributes.topLabelMaxWidth)
+        if !messagesLayoutDelegate.avatarShouldAppear(for: attributes.message, at: attributes.indexPath, in: messagesCollectionView) {
+            return .zero
+        }
 
+        return labelSize(for: topLabelText, considering: attributes.topLabelMaxWidth)
     }
     
 }
@@ -611,23 +633,29 @@ private extension MessagesCollectionViewFlowLayout {
     private func cellHeight(for attributes: MessageIntermediateLayoutAttributes) -> CGFloat {
         
         var cellHeight: CGFloat = 0
-        
-        switch attributes.avatarPosition.vertical {
-        case .cellTop:
-            cellHeight += max(attributes.avatarSize.height, attributes.topLabelSize.height)
-            cellHeight += attributes.bottomLabelSize.height
+
+        if messagesLayoutDelegate.avatarShouldAppear(for: attributes.message, at: attributes.indexPath,
+                                                     in: messagesCollectionView) {
+            switch attributes.avatarPosition.vertical {
+            case .cellTop:
+                cellHeight += max(attributes.avatarSize.height, attributes.topLabelSize.height)
+                cellHeight += attributes.bottomLabelSize.height
+                cellHeight += attributes.messageContainerSize.height
+                cellHeight += attributes.messageVerticalPadding
+            case .cellBottom:
+                cellHeight += max(attributes.avatarSize.height, attributes.bottomLabelSize.height)
+                cellHeight += attributes.topLabelSize.height
+                cellHeight += attributes.messageContainerSize.height
+                cellHeight += attributes.messageVerticalPadding
+            case .messageTop, .messageCenter, .messageBottom:
+                cellHeight += max(attributes.avatarSize.height, attributes.messageContainerSize.height)
+                cellHeight += attributes.messageVerticalPadding
+                cellHeight += attributes.topLabelSize.height
+            }
+            cellHeight -= 8.0
+        } else {
             cellHeight += attributes.messageContainerSize.height
             cellHeight += attributes.messageVerticalPadding
-        case .cellBottom:
-            cellHeight += max(attributes.avatarSize.height, attributes.bottomLabelSize.height)
-            cellHeight += attributes.topLabelSize.height
-            cellHeight += attributes.messageContainerSize.height
-            cellHeight += attributes.messageVerticalPadding
-        case .messageTop, .messageCenter, .messageBottom:
-            cellHeight += max(attributes.avatarSize.height, attributes.messageContainerSize.height)
-            cellHeight += attributes.messageVerticalPadding
-            cellHeight += attributes.topLabelSize.height
-            cellHeight += attributes.bottomLabelSize.height
         }
         
         return cellHeight
