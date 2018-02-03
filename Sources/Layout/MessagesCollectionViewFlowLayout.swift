@@ -652,7 +652,8 @@ private extension MessagesCollectionViewFlowLayout {
                 cellHeight += attributes.messageVerticalPadding
                 cellHeight += attributes.topLabelSize.height
             }
-            cellHeight -= 8.0
+
+            cellHeight -= 12.0
         } else {
             cellHeight += attributes.messageContainerSize.height
             cellHeight += attributes.messageVerticalPadding
