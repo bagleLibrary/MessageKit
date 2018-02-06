@@ -653,10 +653,19 @@ private extension MessagesCollectionViewFlowLayout {
                 cellHeight += attributes.topLabelSize.height
             }
 
-            cellHeight -= 12.0
+            if attributes.messageContainerSize.height < 40 {
+                // 한 줄
+                cellHeight -= 14
+            } else {
+                cellHeight -= 6
+            }
+
         } else {
             cellHeight += attributes.messageContainerSize.height
             cellHeight += attributes.messageVerticalPadding
+            cellHeight += attributes.topLabelSize.height
+
+            cellHeight -= 5
         }
         
         return cellHeight
