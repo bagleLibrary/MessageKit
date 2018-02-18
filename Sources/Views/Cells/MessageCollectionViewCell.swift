@@ -113,7 +113,9 @@ open class MessageCollectionViewCell: UICollectionViewCell, CollectionViewReusab
 
         avatarView.set(avatar: avatar)
         cellTopLabel.attributedText = topText
+        cellTopLabel.textColor = displayDelegate.cellTopLabelColor(for: message, at: indexPath, in: messagesCollectionView)
         cellBottomLabel.attributedText = bottomText
+        cellBottomLabel.textColor = displayDelegate.cellBottomLabelColor(for: message, at: indexPath, in: messagesCollectionView)
     }
 
     func setupGestureRecognizers() {

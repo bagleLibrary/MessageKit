@@ -27,7 +27,9 @@ import MapKit
 
 /// A protocol used by the `MessagesViewController` to customize the appearance of a `MessagesCollectionViewCell`.
 public protocol MessagesDisplayDelegate: AnyObject {
-
+    
+    func cellTopLabelColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
+    func cellBottomLabelColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
     // MARK: - All Messages
 
     /// Specifies the `MessageStyle` to be used for a `MessageContainerView`.
@@ -157,6 +159,12 @@ public protocol MessagesDisplayDelegate: AnyObject {
 
 public extension MessagesDisplayDelegate {
 
+    func cellTopLabelColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        return UIColor.darkText
+    }
+    func cellBottomLabelColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        return UIColor.darkText
+    }
     // MARK: - All Messages Defaults
 
     func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
