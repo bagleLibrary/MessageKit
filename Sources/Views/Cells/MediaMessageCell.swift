@@ -64,5 +64,16 @@ open class MediaMessageCell: MessageCollectionViewCell {
         default:
             break
         }
+        guard let layoutDelegate = messagesCollectionView.messagesLayoutDelegate else {
+            fatalError("MessagesDisplayDelegate not set.")
+        }
+
+        if layoutDelegate.avatarShouldAppear(for: message, at: indexPath, in: messagesCollectionView) {
+            avatarView.isHidden = false
+            cellTopLabel.isHidden = false
+        } else {
+            avatarView.isHidden = true
+            cellTopLabel.isHidden = true
+        }
     }
 }
