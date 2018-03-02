@@ -58,6 +58,7 @@ open class MessageCollectionViewCell: UICollectionViewCell, CollectionViewReusab
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         setupSubviews()
         setupGestureRecognizers()
+        setupConstraints()
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -69,6 +70,9 @@ open class MessageCollectionViewCell: UICollectionViewCell, CollectionViewReusab
         contentView.addSubview(avatarView)
         contentView.addSubview(cellTopLabel)
         contentView.addSubview(cellBottomLabel)
+    }
+    open func setupConstraints() {
+
     }
 
     open override func prepareForReuse() {

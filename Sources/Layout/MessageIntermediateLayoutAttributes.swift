@@ -33,7 +33,7 @@ open class MessageIntermediateLayoutAttributes {
     var indexPath: IndexPath
     
     // Cell
-    var itemHeight: CGFloat = 0
+    public var itemHeight: CGFloat = 0
     var cellFrame: CGRect = .zero
 
     // AvatarView

@@ -57,10 +57,8 @@ open class TextMessageCell: MessageCollectionViewCell {
     open override func setupSubviews() {
         super.setupSubviews()
         messageContainerView.addSubview(messageLabel)
-        setupConstraints()
     }
-    
-    open func setupConstraints() {
+    open override func setupConstraints() {
         messageLabel.fillSuperview()
     }
 

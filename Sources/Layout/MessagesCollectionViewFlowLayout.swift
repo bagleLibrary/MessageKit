@@ -88,7 +88,7 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     }
 
     /// The width of an item in the `MessagesCollectionViewCell`.
-    fileprivate var itemWidth: CGFloat {
+    public var itemWidth: CGFloat {
         guard let collectionView = collectionView else { return 0 }
         return collectionView.frame.width - sectionInset.left - sectionInset.right
     }
@@ -199,13 +199,13 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
 // MARK: - Calculating MessageIntermediateLayoutAttributes
 
-fileprivate extension MessagesCollectionViewFlowLayout {
+public extension MessagesCollectionViewFlowLayout {
     
     /// Returns the cached `MessageIntermediateLayoutAttributes` for a given `IndexPath` (if any).
     /// If no cached attributes exist, new attributes will be created.
     /// - Parameters:
     ///   - indexPath: The `IndexPath` used to retrieve the `MessageType`.
-    func messageIntermediateLayoutAttributes(for indexPath: IndexPath) -> MessageIntermediateLayoutAttributes {
+    public func messageIntermediateLayoutAttributes(for indexPath: IndexPath) -> MessageIntermediateLayoutAttributes {
         
         let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
         

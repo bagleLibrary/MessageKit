@@ -42,10 +42,10 @@ open class LocationMessageCell: MessageCollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         messageContainerView.addSubview(imageView)
         messageContainerView.addSubview(activityIndicator)
-        setupConstraints()
     }
 
-    open func setupConstraints() {
+    open override func setupConstraints() {
+        super.setupConstraints()
         imageView.fillSuperview()
         activityIndicator.centerInSuperview()
     }
