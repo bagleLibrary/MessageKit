@@ -83,8 +83,10 @@ open class TextMessageCell: MessageCollectionViewCell {
 
         let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
         let enabledDetectors = displayDelegate.enabledDetectors(for: message, at: indexPath, in: messagesCollectionView)
+        let messageFont = displayDelegate.messageLabelFont(for: message, at: indexPath, in: messagesCollectionView)
 
         messageLabel.configure {
+            messageLabel.font = messageFont
             messageLabel.enabledDetectors = enabledDetectors
             for detector in enabledDetectors {
                 let attributes = displayDelegate.detectorAttributes(for: detector, and: message, at: indexPath)
