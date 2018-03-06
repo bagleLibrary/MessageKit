@@ -27,7 +27,7 @@ import MapKit
 
 /// A protocol used by the `MessagesViewController` to customize the appearance of a `MessagesCollectionViewCell`.
 public protocol MessagesDisplayDelegate: AnyObject {
-    func messageLabelFont(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIFont
+
     func cellTopLabelColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
     func cellBottomLabelColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
     // MARK: - All Messages
@@ -159,10 +159,6 @@ public protocol MessagesDisplayDelegate: AnyObject {
 
 public extension MessagesDisplayDelegate {
 
-    func messageLabelFont(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIFont {
-        return UIFont.systemFont(ofSize: 17)
-    }
-    
     func cellTopLabelColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
         return UIColor.darkText
     }
