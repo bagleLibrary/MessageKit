@@ -123,8 +123,42 @@ open class MessageCollectionViewCell: UICollectionViewCell, CollectionViewReusab
     }
 
     func setupGestureRecognizers() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
+        //        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
+        //        contentView.addGestureRecognizer(tapGesture)
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapCell))
         contentView.addGestureRecognizer(tapGesture)
+
+        let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(tapAvatarView))
+        avatarView.addGestureRecognizer(tapGesture2)
+
+        let tapGesture3 = UITapGestureRecognizer(target: self, action: #selector(tapCellTopLabel))
+        cellTopLabel.addGestureRecognizer(tapGesture3)
+
+        let tapGesture4 = UITapGestureRecognizer(target: self, action: #selector(tapCellBottomLabel))
+        cellBottomLabel.addGestureRecognizer(tapGesture4)
+
+        let tapGesture5 = UITapGestureRecognizer(target: self, action: #selector(tapContainerView))
+        messageContainerView.addGestureRecognizer(tapGesture5)
+
+    }
+    @objc func tapCell() {
+        delegate?.didTapCell(in: self)
+    }
+
+    @objc func tapAvatarView() {
+        delegate?.didTapAvatar(in: self)
+    }
+
+    @objc func tapCellTopLabel() {
+        delegate?.didTapTopLabel(in: self)
+    }
+
+    @objc func tapCellBottomLabel() {
+        delegate?.didTapBottomLabel(in: self)
+    }
+    @objc func tapContainerView() {
+        delegate?.didTapMessage(in: self)
     }
 
     /// Handle tap gesture on contentView and its subviews like messageContainerView, cellTopLabel, cellBottomLabel, avatarView ....
@@ -143,6 +177,8 @@ open class MessageCollectionViewCell: UICollectionViewCell, CollectionViewReusab
             delegate?.didTapTopLabel(in: self)
         case cellBottomLabel.frame.contains(touchLocation):
             delegate?.didTapBottomLabel(in: self)
+        case self.frame.contains(touchLocation):
+            delegate?.didTapCell(in: self)
         default:
             break
         }

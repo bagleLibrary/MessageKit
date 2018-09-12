@@ -26,7 +26,7 @@
 import UIKit
 
 open class MessagesViewController: UIViewController {
-    
+
     // MARK: - Properties [Public]
 
     /// The `MessagesCollectionView` managed by the messages view controller object.
@@ -40,7 +40,7 @@ open class MessagesViewController: UIViewController {
     ///
     /// The default value of this property is `false`.
     open var scrollsToBottomOnKeybordBeginsEditing: Bool = false
-    
+
     /// A Boolean value that determines whether the `MessagesCollectionView`
     /// maintains it's current position when the height of the `MessageInputBar` changes.
     ///
@@ -58,10 +58,10 @@ open class MessagesViewController: UIViewController {
     open override var shouldAutorotate: Bool {
         return false
     }
-    
+
     /// A Boolean value used to determine if `viewDidLayoutSubviews()` has been called.
     private var isFirstLayout: Bool = true
-    
+
     private var messageCollectionViewBottomInset: CGFloat = 0 {
         didSet {
             messagesCollectionView.contentInset.bottom = messageCollectionViewBottomInset
@@ -79,7 +79,7 @@ open class MessagesViewController: UIViewController {
         view.backgroundColor = .white
         messagesCollectionView.keyboardDismissMode = .interactive
         messagesCollectionView.alwaysBounceVertical = true
-        
+
         setupSubviews()
         setupConstraints()
         registerReusableViews()
@@ -111,7 +111,7 @@ open class MessagesViewController: UIViewController {
     }
 
     /// Registers all cells and supplementary views of the messagesCollectionView property.
-    private func registerReusableViews() {
+    open func registerReusableViews() {
 
         messagesCollectionView.register(TextMessageCell.self)
         messagesCollectionView.register(MediaMessageCell.self)
@@ -131,7 +131,7 @@ open class MessagesViewController: UIViewController {
     /// Sets the constraints of the `MessagesCollectionView`.
     open func setupConstraints() {
         messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: topLayoutGuide.length)
         let bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         if #available(iOS 11.0, *) {
@@ -145,7 +145,7 @@ open class MessagesViewController: UIViewController {
         }
         adjustScrollViewInset()
     }
-    
+
     @objc
     private func adjustScrollViewInset() {
         if #available(iOS 11.0, *) {
@@ -168,7 +168,7 @@ extension MessagesViewController: UICollectionViewDelegateFlowLayout {
         guard let messagesFlowLayout = collectionViewLayout as? MessagesCollectionViewFlowLayout else { return .zero }
         return messagesFlowLayout.sizeForItem(at: indexPath)
     }
-    
+
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         guard let messagesCollectionView = collectionView as? MessagesCollectionView else { return .zero }
         guard let messagesDataSource = messagesCollectionView.messagesDataSource else { return .zero }
@@ -178,7 +178,7 @@ extension MessagesViewController: UICollectionViewDelegateFlowLayout {
         let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
         return messagesLayoutDelegate.headerViewSize(for: message, at: indexPath, in: messagesCollectionView)
     }
-    
+
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         guard let messagesCollectionView = collectionView as? MessagesCollectionView else { return .zero }
         guard let messagesDataSource = messagesCollectionView.messagesDataSource else { return .zero }
@@ -225,15 +225,15 @@ extension MessagesViewController: UICollectionViewDataSource {
 
         switch message.data {
         case .text, .attributedText, .emoji:
-                let cell = messagesCollectionView.dequeueReusableCell(TextMessageCell.self, for: indexPath)
-                cell.configure(with: message, at: indexPath, and: messagesCollectionView)
-                return cell
-        case .photo, .video:
-    	    let cell = messagesCollectionView.dequeueReusableCell(MediaMessageCell.self, for: indexPath)
+            let cell = messagesCollectionView.dequeueReusableCell(TextMessageCell.self, for: indexPath)
+            cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+            return cell
+        case .photo, .video, .custom:
+            let cell = messagesCollectionView.dequeueReusableCell(MediaMessageCell.self, for: indexPath)
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)
             return cell
         case .location:
-    	    let cell = messagesCollectionView.dequeueReusableCell(LocationMessageCell.self, for: indexPath)
+            let cell = messagesCollectionView.dequeueReusableCell(LocationMessageCell.self, for: indexPath)
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)
             return cell
         }
@@ -310,12 +310,12 @@ fileprivate extension MessagesViewController {
             messageCollectionViewBottomInset = afterBottomInset
         }
     }
-    
+
     fileprivate var keyboardOffsetFrame: CGRect {
         guard let inputFrame = inputAccessoryView?.frame else { return .zero }
         return CGRect(origin: inputFrame.origin, size: CGSize(width: inputFrame.width, height: inputFrame.height - iPhoneXBottomInset))
     }
-    
+
     /// On the iPhone X the inputAccessoryView is anchored to the layoutMarginesGuide.bottom anchor so the frame of the inputAccessoryView
     /// is larger than the required offset for the MessagesCollectionView
     ///

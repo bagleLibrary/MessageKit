@@ -108,6 +108,5 @@ open class LocationMessageCell: MessageCollectionViewCell {
             animationBlock?(self.imageView)
         }
         
-        
     }
 }

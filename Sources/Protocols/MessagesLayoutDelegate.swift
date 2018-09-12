@@ -46,7 +46,7 @@ public protocol MessagesLayoutDelegate: AnyObject {
     ///
     /// All other Senders: `UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 30)`
     func messagePadding(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIEdgeInsets
-    
+
     /// Specifies the vertical and horizontal alignment for the `AvatarView` in a `MessageCollectionViewCell`.
     ///
     /// - Parameters:
@@ -215,7 +215,7 @@ public extension MessagesLayoutDelegate {
     func avatarSize(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize {
         return CGSize(width: 30, height: 30)
     }
-    
+
     func avatarPosition(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> AvatarPosition {
         return AvatarPosition(horizontal: .natural, vertical: .messageBottom)
     }
@@ -256,6 +256,12 @@ public extension MessagesLayoutDelegate {
         case .photo(let image), .video(_, let image):
             let boundingRect = CGRect(origin: .zero, size: CGSize(width: maxWidth, height: .greatestFiniteMagnitude))
             return AVMakeRect(aspectRatio: image.size, insideRect: boundingRect).height
+        case .custom(let image):
+            if let image = image as? UIImage {
+                let boundingRect = CGRect(origin: .zero, size: CGSize(width: maxWidth, height: .greatestFiniteMagnitude))
+                return AVMakeRect(aspectRatio: image.size, insideRect: boundingRect).height
+            }
+            return 0
         default:
             return 0
         }
