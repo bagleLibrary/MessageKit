@@ -435,7 +435,7 @@ private extension MessagesCollectionViewFlowLayout {
             messageContainerSize = labelSize(for: text, considering: maxWidth, and: emojiLabelFont)
             messageContainerSize.width += attributes.messageLabelHorizontalInsets
             messageContainerSize.height += attributes.messageLabelVerticalInsets
-        case .photo, .video:
+        case .photo, .video, .custom:
             let width = messagesLayoutDelegate.widthForMedia(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
             let height = messagesLayoutDelegate.heightForMedia(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
             messageContainerSize = CGSize(width: width, height: height)
@@ -443,12 +443,6 @@ private extension MessagesCollectionViewFlowLayout {
             let width = messagesLayoutDelegate.widthForLocation(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
             let height = messagesLayoutDelegate.heightForLocation(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
             messageContainerSize = CGSize(width: width, height: height)
-        case .custom:
-            let width = messagesLayoutDelegate.widthForMedia(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
-            let height = messagesLayoutDelegate.heightForMedia(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
-            messageContainerSize = CGSize(width: width, height: height)
-
-            messageContainerSize = CGSize(width: 200, height: 200)
         }
 
         return messageContainerSize
